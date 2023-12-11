@@ -4,6 +4,7 @@ COPY sources.txt .
 VOLUME /data
 ENTRYPOINT [\
     "wget",\
+    "--continue",\
     "--no-verbose",\
     "--force-directories",\
     "--no-host-directories",\
