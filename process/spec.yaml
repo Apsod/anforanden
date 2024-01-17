@@ -1,0 +1,6 @@
+name: riksdagsdata
+kind: process
+depends_on:
+  input:
+    repo: apsod/anforanden.git
+    subpath: ingest
