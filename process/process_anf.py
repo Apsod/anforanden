@@ -1,3 +1,4 @@
+from zipfile import ZipFile
 import re
 import sys
 import collections
@@ -36,18 +37,21 @@ class DataParser(HTMLParser):
 if __name__ == '__main__':
     data = collections.defaultdict(dict)
     KEYS = ['dok_id', 'avsnittsrubrik', 'underrubrik']
-    for line in sys.stdin:
-        doc = json.loads(line)['anforande']
-        key = tuple(doc.get(k, '') for k in KEYS)
-        subkey = int(doc['anforande_nummer'])
-        text = doc['anforandetext']
-        if text is None:
-            text = ''
-        parser = DataParser()
-        parser.feed(text)
-        parser.close()
-        text = parser.get_data()
-        data[key][subkey] = {'role': doc['talare'], 'message': text}
+    _, doc = sys.argv
+    with ZipFile(doc, mode='r') as zf:
+        names = zf.namelist()
+        for name in names:
+            doc = json.loads(zf.read(name))['anforande']
+            key = tuple(doc.get(k, '') for k in KEYS)
+            subkey = int(doc['anforande_nummer'])
+            text = doc['anforandetext']
+            if text is None:
+                text = ''
+            parser = DataParser()
+            parser.feed(text)
+            parser.close()
+            text = parser.get_data()
+            data[key][subkey] = {'role': doc['talare'], 'message': text}
     for key, parts in data.items():
         doc_id, title, subtitle = key
         nums = sorted(parts)

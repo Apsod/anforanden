@@ -1,5 +1,6 @@
 FROM python:3.11-alpine
 RUN apk add --no-cache parallel
+RUN apk add --no-cache unzip
 RUN apk add --no-cache jq
 COPY process_anf.py .
 COPY process_anf.sh .
