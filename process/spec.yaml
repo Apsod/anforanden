@@ -2,5 +2,4 @@ name: riksdagsdata
 kind: process
 depends_on:
   input:
-    repo: apsod/anforanden.git
-    subpath: ingest
+    ref: git@github.com:apsod/anforanden.git#main:ingest
